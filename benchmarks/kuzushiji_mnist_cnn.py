@@ -61,18 +61,22 @@ def create_model(input_shape, num_classes):
 
 # 定义绘图函数
 def plot_metrics(history, title, filename):
+    epochs_range = range(1, len(history.history['loss']) + 1)
+    
     plt.figure(figsize=(12, 4))
     plt.subplot(1, 3, 1)
-    plt.plot(history.history['loss'], label='Train Loss')
-    plt.plot(history.history['val_loss'], label='Validation Loss')
+    plt.plot(epochs_range, history.history['loss'], label='Train Loss')
+    plt.plot(epochs_range, history.history['val_loss'], label='Validation Loss')
     plt.title('Loss')
     plt.legend()
+    plt.xticks(epochs_range)  # 设置横坐标为整数
 
     plt.subplot(1, 3, 2)
-    plt.plot(history.history['accuracy'], label='Train Accuracy')
-    plt.plot(history.history['val_accuracy'], label='Validation Accuracy')
+    plt.plot(epochs_range, history.history['accuracy'], label='Train Accuracy')
+    plt.plot(epochs_range, history.history['val_accuracy'], label='Validation Accuracy')
     plt.title('Accuracy')
     plt.legend()
+    plt.xticks(epochs_range)  # 设置横坐标为整数
 
     plt.suptitle(title)
     plt.savefig(filename)
