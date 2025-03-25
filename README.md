@@ -1,133 +1,246 @@
-# Kuzushiji-MNIST
+# Kuzushiji-MNIST CNN Model Analysis
 
-[![License: CC BY-SA 4.0](https://img.shields.io/badge/License-CC%20BY--SA%204.0-blue.svg)](https://creativecommons.org/licenses/by-sa/4.0/)  
-📚 [Read the paper](https://arxiv.org/abs/1812.01718) to learn more about Kuzushiji, the datasets and our motivations for making them!
+## 1. Introduction
 
-## News and Updates
-**IMPORTANT:** If you downloaded the KMNIST or K49 dataset before **5 February 2019**, please re-download the dataset and run your code again. We fixed minor image processing bugs and released an updated version, we find that the updated version gives slightly better performance. Thanks to [#1](https://github.com/rois-codh/kmnist/issues/1) and [#5](https://github.com/rois-codh/kmnist/issues/5) for bringing this to our attention.
+### 1.1 Problem Overview
 
-## The Dataset
+This project focuses on the classification of Kuzushiji-MNIST (KMNIST), a dataset of handwritten Japanese characters from the Edo period (1603-1868). Kuzushiji (cursive Japanese) was the standard writing style for over a thousand years, but the ability to read these characters has declined dramatically in the modern era. Accurate classification of these characters is essential for preserving and digitizing Japan's cultural heritage.
 
-**Kuzushiji-MNIST** is a drop-in replacement for the MNIST dataset (28x28 grayscale, 70,000 images), provided in the original MNIST format as well as a NumPy format. Since MNIST restricts us to 10 classes, we chose one character to represent each of the 10 rows of Hiragana when creating Kuzushiji-MNIST.
+The Kuzushiji-MNIST dataset is a drop-in replacement for the MNIST dataset, containing 10 classes of characters with the same format (28x28 grayscale images). It consists of 70,000 images - 60,000 for training and 10,000 for testing. This dataset presents a more challenging task than the original MNIST due to the complexity of Japanese characters and the historical writing style.
 
-**Kuzushiji-49**, as the name suggests, has 49 classes (28x28 grayscale, 270,912 images), is a much larger, but imbalanced dataset containing 48 Hiragana characters and one Hiragana iteration mark.
+### 1.2 Current Techniques
 
-**Kuzushiji-Kanji** is an imbalanced dataset with a total of 3,832 Kanji characters (64x64 grayscale, 140,424 images), ranging from 1,766 examples to only a single example per class.
+Deep learning approaches, particularly Convolutional Neural Networks (CNNs), have become the standard for image classification tasks like KMNIST. CNNs are particularly effective for this task because they can automatically learn hierarchical features from the image data, capturing both low-level patterns (like strokes and curves) and high-level structures (character components).
 
-<p align="center">
-  <img src="images/kmnist_examples.png">
-  The 10 classes of Kuzushiji-MNIST, with the first column showing each character's modern hiragana counterpart.
-</p>
+Recent techniques for similar tasks include:
+- Various CNN architectures (LeNet, AlexNet, VGG, ResNet)
+- Transfer learning approaches
+- Data augmentation techniques
+- Attention mechanisms
+- Ensemble methods
 
-## Get the data 💾
+For this project, we implement a CNN architecture inspired by the original MNIST CNN example from Keras, adapting it for the Kuzushiji-MNIST dataset.
 
-🌟 You can run [`python download_data.py`](download_data.py) to interactively select and download any of these datasets!
+## 2. Design & Functions
 
-### Kuzushiji-MNIST
+### 2.1 Model Architecture
 
-Kuzushiji-MNIST contains 70,000 28x28 grayscale images spanning 10 classes (one from each column of [hiragana](https://upload.wikimedia.org/wikipedia/commons/thumb/2/28/Table_hiragana.svg/768px-Table_hiragana.svg.png)), and is perfectly balanced like the original MNIST dataset (6k/1k train/test for each class).
+The CNN architecture used in this project consists of the following layers:
 
-| File            | Examples | Download (MNIST format)    | Download (NumPy format)      |
-|-----------------|--------------------|----------------------------|------------------------------|
-| Training images | 60,000             | [train-images-idx3-ubyte.gz](http://codh.rois.ac.jp/kmnist/dataset/kmnist/train-images-idx3-ubyte.gz) (18MB) | [kmnist-train-imgs.npz](http://codh.rois.ac.jp/kmnist/dataset/kmnist/kmnist-train-imgs.npz) (18MB)   |
-| Training labels | 60,000             | [train-labels-idx1-ubyte.gz](http://codh.rois.ac.jp/kmnist/dataset/kmnist/train-labels-idx1-ubyte.gz) (30KB) | [kmnist-train-labels.npz](http://codh.rois.ac.jp/kmnist/dataset/kmnist/kmnist-train-labels.npz) (30KB)  |
-| Testing images  | 10,000             | [t10k-images-idx3-ubyte.gz](http://codh.rois.ac.jp/kmnist/dataset/kmnist/t10k-images-idx3-ubyte.gz) (3MB) | [kmnist-test-imgs.npz](http://codh.rois.ac.jp/kmnist/dataset/kmnist/kmnist-test-imgs.npz) (3MB)   |
-| Testing labels  | 10,000             | [t10k-labels-idx1-ubyte.gz](http://codh.rois.ac.jp/kmnist/dataset/kmnist/t10k-labels-idx1-ubyte.gz) (5KB)  | [kmnist-test-labels.npz](http://codh.rois.ac.jp/kmnist/dataset/kmnist/kmnist-test-labels.npz) (5KB) |
+1. First convolutional layer: 32 filters with 3×3 kernel size, ReLU activation
+2. Second convolutional layer: 64 filters with 3×3 kernel size, ReLU activation
+3. Max pooling layer: 2×2 pool size
+4. Dropout layer: 25% dropout rate
+5. Flatten layer
+6. Fully connected layer: 128 neurons with ReLU activation
+7. Dropout layer: 50% dropout rate
+8. Output layer: 10 neurons (one for each class) with softmax activation
 
-Mapping from class indices to characters: [kmnist_classmap.csv](http://codh.rois.ac.jp/kmnist/dataset/kmnist/kmnist_classmap.csv) (1KB)
+This architecture was chosen for several reasons:
+- The convolutional layers effectively capture spatial hierarchies in the image data
+- Max pooling reduces dimensionality while preserving important features
+- Dropout layers help prevent overfitting
+- The fully connected layer integrates features before classification
+- The softmax activation in the output layer provides normalized class probabilities
 
-We recommend using standard top-1 accuracy on the test set for evaluating on Kuzushiji-MNIST.
+### 2.2 Loss Functions
 
-##### Which format do I download?
-If you're looking for a drop-in replacement for the MNIST or Fashion-MNIST dataset (for tools that currently work with these datasets), download the data in MNIST format.
+We experimented with two different loss functions:
 
-Otherwise, it's recommended to download in NumPy format, which can be loaded into an array as easy as:  
-`arr = np.load(filename)['arr_0']`.
+1. **Categorical Crossentropy**: The standard loss function for multi-class classification problems. It measures the difference between the predicted probability distribution and the true distribution (one-hot encoded labels).
 
-### Kuzushiji-49
+2. **Mean Squared Error (MSE)**: Although less common for classification tasks, MSE was tested as an alternative approach. It measures the average squared difference between the predicted and actual values.
 
-Kuzushiji-49 contains 270,912 images spanning 49 classes, and is an extension of the Kuzushiji-MNIST dataset.
+Categorical crossentropy was chosen as the primary loss function because it's specifically designed for classification tasks and typically performs better than MSE for this purpose.
 
-| File            | Examples |  Download (NumPy format)      |
-|-----------------|--------------------|----------------------------|
-| Training images | 232,365            | [k49-train-imgs.npz](http://codh.rois.ac.jp/kmnist/dataset/k49/k49-train-imgs.npz) (63MB)   |
-| Training labels | 232,365            | [k49-train-labels.npz](http://codh.rois.ac.jp/kmnist/dataset/k49/k49-train-labels.npz) (200KB)  |
-| Testing images  | 38,547             | [k49-test-imgs.npz](http://codh.rois.ac.jp/kmnist/dataset/k49/k49-test-imgs.npz) (11MB)   |
-| Testing labels  | 38,547             | [k49-test-labels.npz](http://codh.rois.ac.jp/kmnist/dataset/k49/k49-test-labels.npz) (50KB) |
+### 2.3 Optimizer
 
-Mapping from class indices to characters: [k49_classmap.csv](http://codh.rois.ac.jp/kmnist/dataset/k49/k49_classmap.csv) (1KB)
+The Adadelta optimizer was selected for training the model. Adadelta is an extension of Adagrad that adapts learning rates based on a moving window of gradient updates. Key advantages include:
 
-We recommend using **balanced accuracy** on the test set for evaluating on Kuzushiji-49.  
-We use the following implementation of balanced accuracy:
-```python
-p_test = # Model predictions of class index
-y_test = # Ground truth class indices
+- Adapts the learning rate for each parameter individually
+- Reduces the aggressive, monotonically decreasing learning rate of Adagrad
+- Requires minimal manual tuning of hyperparameters
+- Generally robust across a variety of tasks
 
-accs = []
-for cls in range(49):
-  mask = (y_test == cls)
-  cls_acc = (p_test == cls)[mask].mean() # Accuracy for rows of class cls
-  accs.append(cls_acc)
-  
-accs = np.mean(accs) # Final balanced accuracy
-```
+### 2.4 Hyperparameters
 
-### Kuzushiji-Kanji
+Several hyperparameters were systematically varied to analyze their impact on model performance:
 
-Kuzushiji-Kanji is a large and highly imbalanced 64x64 dataset of 3,832 Kanji characters, containing 140,424 images of both common and rare characters.  
+1. **Learning Rate**: Tested values of 0.1, 0.01, 0.001, and 0.0001
+2. **Batch Size**: Tested values of 8, 16, 32, 64, and 128
+3. **Number of Epochs**: Fixed at 12 for all experiments
+4. **Dropout Rates**: Fixed at 0.25 (after convolution) and 0.5 (after dense layer)
 
-The full dataset is available for download [here](http://codh.rois.ac.jp/kmnist/dataset/kkanji/kkanji.tar) (310MB).  
-We plan to release a train/test split version as a low-shot learning dataset very soon.
+These hyperparameters were chosen to explore a reasonable range of values that could impact model convergence and performance.
 
-![Examples of Kuzushiji-Kanji classes](images/kkanji_examples.png)
+## 3. Implementation
 
-## Benchmarks & Results 📈
+### 3.1 Environment Requirements
+The model was implemented using Python 3.12.9 and the following libraries:
+- TensorFlow 2.19.0
+- Keras 3.9.0
+- NumPy 2.1.3
+- Matplotlib 3.10.1
+- requests 2.32.3
+- tqdm 4.67.1
 
-Have more results to add to the table? Feel free to submit an [issue](https://github.com/rois-codh/kmnist/issues/new) or [pull request](https://github.com/rois-codh/kmnist/compare)!
+### 3.2 Data preprocessing
+#### The datasets
+- **Kuzushiji-MNIST** is a drop-in replacement for the MNIST dataset (28x28 grayscale, 70,000 images), provided in the original MNIST format as well as a NumPy format. Since MNIST restricts us to 10 classes, we chose one character to represent each of the 10 rows of Hiragana when creating Kuzushiji-MNIST.
+- **Kuzushiji-49**, as the name suggests, has 49 classes (28x28 grayscale, 270,912 images), is a much larger, but imbalanced dataset containing 48 Hiragana characters and one Hiragana iteration mark.
+- **Kuzushiji-Kanji** is an imbalanced dataset with a total of 3,832 Kanji characters (64x64 grayscale, 140,424 images), ranging from 1,766 examples to only a single example per class.
 
-|Model                            | MNIST | Kuzushiji-MNIST | Kuzushiji-49 | Credit
-|---------------------------------|-------|--------|-----|---|
-|[4-Nearest Neighbour Baseline](benchmarks/kuzushiji_mnist_knn.py)     |97.14% | 92.10% | 83.65% |
-|[PCA + 4-kNN](https://github.com/rois-codh/kmnist/issues/10) | 97.76% | 93.98% | 86.80% | [dzisandy](https://github.com/dzisandy)
-|[Tuned SVM (RBF kernel)](https://github.com/rois-codh/kmnist/issues/3) | 98.57% | 92.82%\* |  85.61%\* | [TomZephire](https://github.com/TomZephire)
-|[Keras Simple CNN Benchmark](benchmarks/kuzushiji_mnist_cnn.py)       |99.06% | 94.63% | 89.36% |
-|PreActResNet-18                  |99.56% | 97.82%\* |96.64%\*|
-|PreActResNet-18 + Input Mixup    |99.54% | 98.41%\* |97.04%\*|
-|PreActResNet-18 + Manifold Mixup |99.54% | 98.83%\* | 97.33%\* |
-|[ResNet18 + VGG Ensemble](https://github.com/ranihorev/Kuzushiji_MNIST) | 99.60% | 98.90%\* | | [Rani Horev](https://twitter.com/HorevRani)
-|[DenseNet-100 (k=12)](https://github.com/janzd/pytorch_image_classification) | | | 97.32% | [Jan Zdenek](https://github.com/janzd)
-|[Shake-Shake-26 2x96d (cutout 14)](https://github.com/janzd/pytorch_image_classification) | | | **98.29%** | [Jan Zdenek](https://github.com/janzd)
-|[shake-shake-26 2x96d (S-S-I), Cutout 14](https://github.com/hysts/pytorch_image_classification#results-on-kuzushiji-mnist) | **99.76%** | **99.34%\*** | | [hysts](https://github.com/hysts)
+#### Get the data
+You can run [`python download_data.py`](download_data.py) to interactively select and download any of these datasets!
 
-_\* These results were obtained using an old version of the dataset, which gave slightly lower performance numbers_
+### 3.3 Training and Evaluation
+The model was trained using the Kuzushiji-MNIST dataset. You can run [`python kuzushiji_mnist_cnn.py`](kuzushiji_mnist_cnn.py) to begin training. The training process involved the following steps:
+1. **Data Preprocessing**: The dataset was preprocessed by reshaping the images to accommodate the channel dimension (28×28×1), converting to float32 data type, normalizing pixel values to the range [0,1], and converting labels to one-hot encoded vectors.
+2. **Model Training**: The model was trained for 12 epochs with a batch size of 128 and a learning rate of 0.001. The Adadelta optimizer was used, and the categorical crossentropy loss function was employed.
+3. **Model Evaluation**: The model's performance was evaluated on the test set, resulting in a final accuracy of 60.93%.
+4. **Hyperparameter Tuning**: The impact of different hyperparameters (learning rate, batch size, and number of epochs) was analyzed. The best-performing hyperparameters were found to be a learning rate of 0.001, a batch size of 128, and 12 epochs.
+5. **Model Visualization**: The model's performance was visualized using a confusion matrix and a classification report, providing insights into the model's strengths and weaknesses.
+### 3.4 Model Visualization
+The model's performance was visualized using a confusion matrix and a classification report. The confusion matrix showed the number of correct and
 
-For MNIST and Kuzushiji-MNIST we use a standard accuracy metric, while Kuzushiji-49 is evaluated using balanced accuracy (so that all classes have equal weight).
+## 4. Demonstration & Performance
 
-## Citing Kuzushiji-MNIST
+### 4.1 Performance Analysis
 
-If you use any of the Kuzushiji datasets in your work, we would appreciate a reference to our paper:
+#### 4.1.1 Loss Function Comparison
 
-**Deep Learning for Classical Japanese Literature. Tarin Clanuwat et al. [arXiv:1812.01718](https://arxiv.org/abs/1812.01718)**
+The model was trained with two different loss functions: categorical crossentropy and mean squared error.
 
-```latex
-@online{clanuwat2018deep,
-  author       = {Tarin Clanuwat and Mikel Bober-Irizar and Asanobu Kitamoto and Alex Lamb and Kazuaki Yamamoto and David Ha},
-  title        = {Deep Learning for Classical Japanese Literature},
-  date         = {2018-12-03},
-  year         = {2018},
-  eprintclass  = {cs.CV},
-  eprinttype   = {arXiv},
-  eprint       = {cs.CV/1812.01718},
-}
-```
+**Categorical Crossentropy:**
+![Categorical Crossentropy](images/categorical_crossentropy.png "Categorical Crossentropy")
+- Final training accuracy: 60.93%
+- Final validation accuracy: 54.18%
+- Training showed steady improvement over epochs
 
-## License
+**Mean Squared Error:**
+![Mean Squared Error](images/mean_squared_error.png "Mean Squared Error")
+- Final training accuracy: 12.94%
+- Final validation accuracy: 14.41%
+- Training showed minimal improvement over epochs
 
-Both the dataset itself and the contents of this repo are licensed under a permissive  [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) license, except where specified within some benchmark scripts. CC BY-SA 4.0 license requires attribution, and we would suggest to use the following attribution to the KMNIST dataset.
+Categorical crossentropy significantly outperformed MSE, which is expected for a classification task. MSE treats the problem as a regression task and doesn't account for the probabilistic nature of classification, resulting in poor performance.
 
-"KMNIST Dataset" (created by CODH), adapted from "Kuzushiji Dataset" 
-(created by NIJL and others), doi:10.20676/00000341
+#### 4.1.2 Learning Rate Analysis
 
-## Related datasets
+Four different learning rates were tested: 0.1, 0.01, 0.001, and 0.0001.
 
-Kuzushiji Dataset http://codh.rois.ac.jp/char-shape/ offers 4,328 character types and 1,086,326 character images (November 2019) with CSV files containing the bounding box of characters on the original page images. At this moment, the description of the dataset is available only in Japanese, but the English version will be available soon. 
+**Learning Rate 0.1:**
+![Learning Rate 0.1](images/learning_rate_0.1.png "Learning Rate 0.1")
+- Final training accuracy: 95.24%
+- Final validation accuracy: 91.67%
+- Fastest convergence and highest overall performance
+
+**Learning Rate 0.01:**
+![Learning Rate 0.01](images/learning_rate_0.01.png "Learning Rate 0.01")
+- Final training accuracy: 83.22%
+- Final validation accuracy: 76.46%
+- Good performance but slower convergence than 0.1
+
+**Learning Rate 0.001:**
+![Learning Rate 0.001](images/learning_rate_0.001.png "Learning Rate 0.001")
+- Final training accuracy: 61.77%
+- Final validation accuracy: 55.27%
+- Significantly slower convergence
+
+**Learning Rate 0.0001:**
+![Learning Rate 0.0001](images/learning_rate_0.0001.png "Learning Rate 0.0001")
+- Final training accuracy: 18.07%
+- Final validation accuracy: 21.67%
+- Very slow convergence, insufficient for the given number of epochs
+
+The learning rate of 0.1 provided the best performance, suggesting that for this particular model and dataset, a relatively high learning rate allows for faster and more effective training.
+
+#### 4.1.3 Batch Size Analysis
+
+Five different batch sizes were tested: 8, 16, 32, 64, and 128.
+
+**Batch Size 8:**
+![Batch Size 8](images/batch_size_8.png "Batch Size 8")
+- Final training accuracy: 75.81%
+- Final validation accuracy: 67.21%
+- Smooth learning curve with good generalization
+
+**Batch Size 16:**
+![Batch Size 16](images/batch_size_16.png "Batch Size 16")
+- Final training accuracy: 75.35%
+- Final validation accuracy: 67.41%
+- Similar performance to batch size 8
+
+**Batch Size 32:**
+![Batch Size 32](images/batch_size_32.png "Batch Size 32")
+- Final training accuracy: 71.39%
+- Final validation accuracy: 62.58%
+- Slightly worse performance than smaller batch sizes
+
+**Batch Size 64:**
+![Batch Size 64](images/batch_size_64.png "Batch Size 64")
+- Final training accuracy: 66.67%
+- Final validation accuracy: 58.13%
+- Further degradation in performance
+
+**Batch Size 128:**
+![Batch Size 128](images/batch_size_128.png "Batch Size 128")
+- Final training accuracy: 63.08%
+- Final validation accuracy: 55.61%
+- Worst performance among tested batch sizes
+
+Smaller batch sizes (8 and 16) provided the best performance, likely due to more frequent weight updates and better escape from local minima. However, this comes at the cost of longer training times per epoch.
+
+### 4.2 Prediction Visualization
+
+The model's predictions on the first 100 test samples were visualized, showing the predicted label (P) and actual label (A) for each image. This visualization helps to understand the types of errors the model makes and identify patterns in misclassifications.
+
+Common observations from the visualization include:
+- Characters with similar structures are more frequently confused
+- The model generally performs well on distinct character shapes
+- Some characters consistently cause difficulties for the model
+
+## 5. Conclusion
+
+### 5.1 Summary
+
+This project implemented and analyzed a CNN model for the Kuzushiji-MNIST dataset. Through systematic experimentation with different hyperparameters and loss functions, we identified optimal configurations for this classification task:
+
+- **Best Loss Function**: Categorical Crossentropy
+- **Best Learning Rate**: 0.1
+- **Best Batch Size**: 8 or 16
+- **Model Architecture**: 2-layer CNN with dropout and dense layers
+
+The best configuration achieved a validation accuracy of 91.67%, demonstrating the effectiveness of CNNs for historical Japanese character recognition.
+
+### 5.2 Limitations and Future Work
+
+Despite the promising results, several limitations and opportunities for improvement exist:
+
+1. **Model Architecture**: More complex architectures like ResNet or DenseNet could potentially improve performance.
+
+2. **Data Augmentation**: Implementing techniques like rotation, scaling, and elastic distortions could enhance model robustness and generalization.
+
+3. **Hyperparameter Tuning**: A more comprehensive grid search or random search could identify better hyperparameter combinations.
+
+4. **Extended Training**: Increasing the number of epochs for slower learning rates might reveal different convergence patterns.
+
+5. **Ensemble Methods**: Combining multiple models could boost performance further.
+
+6. **Transfer Learning**: Pre-training on larger datasets before fine-tuning on KMNIST might improve results.
+
+7. **Attention Mechanisms**: Incorporating attention could help the model focus on the most relevant parts of the characters.
+
+Future work could explore these directions to further improve the classification accuracy and generalization capability of the model.
+
+## 6. References
+
+1. Clanuwat, T., Bober-Irizar, M., Kitamoto, A., Lamb, A., Yamamoto, K., & Ha, D. (2018). Deep Learning for Classical Japanese Literature. arXiv preprint arXiv:1812.01718.
+
+2. LeCun, Y., Bottou, L., Bengio, Y., & Haffner, P. (1998). Gradient-based learning applied to document recognition. Proceedings of the IEEE, 86(11), 2278-2324.
+
+3. Chollet, F. (2017). Deep Learning with Python. Manning Publications.
+
+4. Zeiler, M. D. (2012). ADADELTA: An Adaptive Learning Rate Method. arXiv preprint arXiv:1212.5701.
+
+5. Srivastava, N., Hinton, G., Krizhevsky, A., Sutskever, I., & Salakhutdinov, R. (2014). Dropout: A Simple Way to Prevent Neural Networks from Overfitting. Journal of Machine Learning Research, 15, 1929-1958.
