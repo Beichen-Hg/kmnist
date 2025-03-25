@@ -112,13 +112,13 @@ The model's performance was visualized using a confusion matrix and a classifica
 The model was trained with two different loss functions: categorical crossentropy and mean squared error.
 
 **Categorical Crossentropy:**
-![Categorical Crossentropy](images/categorical_crossentropy.png "Categorical Crossentropy")
+![Categorical Crossentropy](categorical_crossentropy.png "Categorical Crossentropy")
 - Final training accuracy: 60.93%
 - Final validation accuracy: 54.18%
 - Training showed steady improvement over epochs
 
 **Mean Squared Error:**
-![Mean Squared Error](images/mean_squared_error.png "Mean Squared Error")
+![Mean Squared Error](mean_squared_error.png "Mean Squared Error")
 - Final training accuracy: 12.94%
 - Final validation accuracy: 14.41%
 - Training showed minimal improvement over epochs
@@ -130,25 +130,25 @@ Categorical crossentropy significantly outperformed MSE, which is expected for a
 Four different learning rates were tested: 0.1, 0.01, 0.001, and 0.0001.
 
 **Learning Rate 0.1:**
-![Learning Rate 0.1](images/learning_rate_0.1.png "Learning Rate 0.1")
+![Learning Rate 0.1](learning_rate_0.1.png "Learning Rate 0.1")
 - Final training accuracy: 95.24%
 - Final validation accuracy: 91.67%
 - Fastest convergence and highest overall performance
 
 **Learning Rate 0.01:**
-![Learning Rate 0.01](images/learning_rate_0.01.png "Learning Rate 0.01")
+![Learning Rate 0.01](learning_rate_0.01.png "Learning Rate 0.01")
 - Final training accuracy: 83.22%
 - Final validation accuracy: 76.46%
 - Good performance but slower convergence than 0.1
 
 **Learning Rate 0.001:**
-![Learning Rate 0.001](images/learning_rate_0.001.png "Learning Rate 0.001")
+![Learning Rate 0.001](learning_rate_0.001.png "Learning Rate 0.001")
 - Final training accuracy: 61.77%
 - Final validation accuracy: 55.27%
 - Significantly slower convergence
 
 **Learning Rate 0.0001:**
-![Learning Rate 0.0001](images/learning_rate_0.0001.png "Learning Rate 0.0001")
+![Learning Rate 0.0001](learning_rate_0.0001.png "Learning Rate 0.0001")
 - Final training accuracy: 18.07%
 - Final validation accuracy: 21.67%
 - Very slow convergence, insufficient for the given number of epochs
@@ -160,25 +160,25 @@ The learning rate of 0.1 provided the best performance, suggesting that for this
 Five different batch sizes were tested: 8, 16, 32, 64, and 128.
 
 **Batch Size 8:**
-![Batch Size 8](images/batch_size_8.png "Batch Size 8")
+![Batch Size 8](batch_size_8.png "Batch Size 8")
 - Final training accuracy: 75.81%
 - Final validation accuracy: 67.21%
 - Smooth learning curve with good generalization
 
 **Batch Size 16:**
-![Batch Size 16](images/batch_size_16.png "Batch Size 16")
+![Batch Size 16](batch_size_16.png "Batch Size 16")
 - Final training accuracy: 75.35%
 - Final validation accuracy: 67.41%
 - Similar performance to batch size 8
 
 **Batch Size 32:**
-![Batch Size 32](images/batch_size_32.png "Batch Size 32")
+![Batch Size 32](batch_size_32.png "Batch Size 32")
 - Final training accuracy: 71.39%
 - Final validation accuracy: 62.58%
 - Slightly worse performance than smaller batch sizes
 
 **Batch Size 64:**
-![Batch Size 64](images/batch_size_64.png "Batch Size 64")
+![Batch Size 64](batch_size_64.png "Batch Size 64")
 - Final training accuracy: 66.67%
 - Final validation accuracy: 58.13%
 - Further degradation in performance
@@ -232,15 +232,3 @@ Despite the promising results, several limitations and opportunities for improve
 7. **Attention Mechanisms**: Incorporating attention could help the model focus on the most relevant parts of the characters.
 
 Future work could explore these directions to further improve the classification accuracy and generalization capability of the model.
-
-## 6. References
-
-1. Clanuwat, T., Bober-Irizar, M., Kitamoto, A., Lamb, A., Yamamoto, K., & Ha, D. (2018). Deep Learning for Classical Japanese Literature. arXiv preprint arXiv:1812.01718.
-
-2. LeCun, Y., Bottou, L., Bengio, Y., & Haffner, P. (1998). Gradient-based learning applied to document recognition. Proceedings of the IEEE, 86(11), 2278-2324.
-
-3. Chollet, F. (2017). Deep Learning with Python. Manning Publications.
-
-4. Zeiler, M. D. (2012). ADADELTA: An Adaptive Learning Rate Method. arXiv preprint arXiv:1212.5701.
-
-5. Srivastava, N., Hinton, G., Krizhevsky, A., Sutskever, I., & Salakhutdinov, R. (2014). Dropout: A Simple Way to Prevent Neural Networks from Overfitting. Journal of Machine Learning Research, 15, 1929-1958.
