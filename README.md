@@ -94,7 +94,7 @@ The model was implemented using Python 3.12.9 and the following libraries:
 You can run [`python download_data.py`](download_data.py) to interactively select and download any of these datasets!
 
 ### 3.3 Training and Evaluation
-The model was trained using the Kuzushiji-MNIST dataset. You can run [`python kuzushiji_mnist_cnn.py`](kuzushiji_mnist_cnn.py) to begin training. The training process involved the following steps:
+The model was trained using the Kuzushiji-MNIST dataset. You can run [`python kuzushiji_mnist_cnn.py`](benchmarks/kuzushiji_mnist_cnn.py) to begin training. The training process involved the following steps:
 1. **Data Preprocessing**: The dataset was preprocessed by reshaping the images to accommodate the channel dimension (28×28×1), converting to float32 data type, normalizing pixel values to the range [0,1], and converting labels to one-hot encoded vectors.
 2. **Model Training**: The model was trained for 12 epochs with a batch size of 128 and a learning rate of 0.001. The Adadelta optimizer was used, and the categorical crossentropy loss function was employed.
 3. **Model Evaluation**: The model's performance was evaluated on the test set, resulting in a final accuracy of 60.93%.
