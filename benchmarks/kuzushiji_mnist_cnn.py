@@ -2,14 +2,13 @@
 
 from __future__ import print_function
 import keras
-from keras.models import Sequential
-from keras.layers import Dense, Dropout, Flatten
-from keras.layers import Conv2D, MaxPooling2D
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense, Dropout, Flatten, Conv2D, MaxPooling2D
 from keras import backend as K
 import numpy as np
 import matplotlib.pyplot as plt
 import json
-from keras.callbacks import Callback
+from tensorflow.keras.callbacks import Callback
 
 batch_size = 128
 num_classes = 10
