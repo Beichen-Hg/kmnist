@@ -184,7 +184,7 @@ Five different batch sizes were tested: 8, 16, 32, 64, and 128.
 - Further degradation in performance
 
 **Batch Size 128:**
-![Batch Size 128](images/batch_size_128.png "Batch Size 128")
+![Batch Size 128](batch_size_128.png "Batch Size 128")
 - Final training accuracy: 63.08%
 - Final validation accuracy: 55.61%
 - Worst performance among tested batch sizes
