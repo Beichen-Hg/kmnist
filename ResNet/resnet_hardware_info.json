@@ -1,0 +1,1 @@
+{"device": "GPU", "final_model_avg_epoch_time": 88.30017469326656, "selected_loss": "categorical_crossentropy", "selected_batch_size": 8, "selected_learning_rate": 0.1}
